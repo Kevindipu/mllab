@@ -1,20 +1,30 @@
 import numpy as np
 import matplotlib.pyplot as plt
+x = np.linspace(-5, 5, 100)
+y = np.linspace(-5, 5, 100)
+X, Y = np.meshgrid(x, y)
+Z = np.sin(np.sqrt(X**2 + Y**2)) / (np.sqrt(X**2 + Y**2))
+plt.figure(figsize=(8, 6))
+contours=plt.contour(X, Y, Z)
+plt.colorbar(contours)
+plt.title('Contour Plot of n-dimensional Data')
+plt.xlabel('X')
+plt.ylabel('Y')
+plt.show()
 
-def contour_plot(data, n):
-  # Create a meshgrid of the data.
-  x, y = np.meshgrid(*data.T)
 
-  # Create a contour plot of the data.
-  plt.contour(x, y, data, n)
 
-  # Plot the contour plot.
-  plt.show()
+import pandas as pd
+dataset = pd.read_csv('./ToyotaCorolla.csv')
+dataset.head(5)
+x = dataset['Age']
+y = dataset['KM']
+z = dataset['Price']
 
-if __name__ == "__main__":
-  # Generate some n-dimensional data.
-  data = np.random.rand(10, 10, 10)
-
-  # Visualize the data using contour plots.
-  for i in range(data.shape[0]):
-    contour_plot(data[i], data.shape[0])
+# Create a contour plot
+plt.tricontourf(x, y, z, levels=20, cmap='jet')
+plt.colorbar(label='Price')
+plt.xlabel('Age')
+plt.ylabel('KM')
+plt.title('Contour Plot of Price vs. Age and KM')
+plt.show()
