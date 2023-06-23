@@ -1,0 +1,16 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
+# Create a 3D surface plot of the n-dimensional data
+def plot_surface(data):
+  fig = plt.figure()
+  ax = fig.add_subplot(111, projection='3d')
+  ax.plot_surface(data, Y=data, Z=data, cmap='jet')
+  plt.show()
+
+# Generate some n-dimensional data
+data = np.random.rand(100, 10)
+
+# Plot the data as a 3D surface plot
+plot_surface(data)
