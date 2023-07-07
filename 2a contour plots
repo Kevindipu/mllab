@@ -1,3 +1,20 @@
+import pandas as pd
+dataset = pd.read_csv('./ToyotaCorolla.csv')
+dataset.head(5)
+x = dataset['Age']
+y = dataset['KM']
+z = dataset['Price']
+
+# Create a contour plot
+plt.tricontourf(x, y, z, levels=20, cmap='jet')
+plt.colorbar(label='Price')
+plt.xlabel('Age')
+plt.ylabel('KM')
+plt.title('Contour Plot of Price vs. Age and KM')
+plt.show()
+
+
+
 /*
 import numpy as np
 import matplotlib.pyplot as plt
@@ -16,17 +33,4 @@ plt.show()
 
 
 
-import pandas as pd
-dataset = pd.read_csv('./ToyotaCorolla.csv')
-dataset.head(5)
-x = dataset['Age']
-y = dataset['KM']
-z = dataset['Price']
 
-# Create a contour plot
-plt.tricontourf(x, y, z, levels=20, cmap='jet')
-plt.colorbar(label='Price')
-plt.xlabel('Age')
-plt.ylabel('KM')
-plt.title('Contour Plot of Price vs. Age and KM')
-plt.show()
