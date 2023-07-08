@@ -1,36 +1,20 @@
 import pandas as pd
-dataset = pd.read_csv('./ToyotaCorolla.csv')
-dataset.head(5)
-x = dataset['Age']
-y = dataset['KM']
-z = dataset['Price']
-
-# Create a contour plot
-plt.tricontourf(x, y, z, levels=20, cmap='jet')
-plt.colorbar(label='Price')
-plt.xlabel('Age')
-plt.ylabel('KM')
-plt.title('Contour Plot of Price vs. Age and KM')
-plt.show()
-
-
-
-/*
 import numpy as np
 import matplotlib.pyplot as plt
-x = np.linspace(-5, 5, 100)
-y = np.linspace(-5, 5, 100)
-X, Y = np.meshgrid(x, y)
-Z = np.sin(np.sqrt(X**2 + Y**2)) / (np.sqrt(X**2 + Y**2))
-plt.figure(figsize=(8, 6))
-contours=plt.contour(X, Y, Z)
-plt.colorbar(contours)
-plt.title('Contour Plot of n-dimensional Data')
-plt.xlabel('X')
-plt.ylabel('Y')
-plt.show()
-*?/
 
+dataset = pd.read_csv('./ToyotaCorolla.csv')
+dataset.head(5)
 
+x = dataset['KM']
+y = dataset['Age']
+z = dataset['Price']
+ax.set_xlabel('KM')
+ax.set_ylabel('Age')
+ax.set_zlabel('Price')
 
-
+#The figsize parameter takes a tuple of two values, where the first value represents the width and the second value represents the height of the figure.
+fig = plt.figure(figsize=(10, 10))
+#The add_subplot function is used to add subplots to a figure. The first argument, 111, specifies the number of rows, number of columns, and the index of the subplot. In this case, 111 means 1 row, 1 column, and the first (and only) subplot.
+#The projection='3d' argument specifies that the subplot should be a 3D plo
+ax = fig.add_subplot(111, projection='3d')
+ax.plot_trisurf(x, y, z)
