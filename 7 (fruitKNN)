@@ -1,0 +1,75 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.model_selection import train_test_split
+from collections import Counter
+from sklearn.preprocessing import StandardScaler
+
+import warnings
+warnings.filterwarnings("ignore")
+
+def find_distance(a, b, p=1):
+    dim = len(a)
+    distance = 0
+    for d in range(dim):
+        distance += abs(a[d] - b[d]) ** p
+        
+    distance = distance**(1/p)
+    return distance
+
+def test_distance(test_point, train_points, y_train, k, p=1):
+    distances = []
+    for i in range(len(train_points)):
+        distances.append(find_distance(test_point, train_points[i], p))
+        
+    df_distance = pd.DataFrame(data=distances, index=y_train.index ,columns=["dist"])
+    df_nn = df_distance.sort_values(by=["dist"], axis=0)[:k]
+    return df_nn
+
+def return_most_common(y, df_nn):
+    """
+    Returns the most common class label based on the nearest neighbours.
+    """
+    counter = Counter(y[df_nn.index])
+    return counter.most_common()[0][0]
+
+
+
+def knn_predict(X_train, y_train, X_test, k=5, p=1):
+    y_predicted_data = []
+    for test_point in X_test:
+        distances = test_distance(test_point, X_train, y_train, k, p)
+        prediction = return_most_common(y_train, distances)
+        y_predicted_data.append(prediction)
+        
+    return y_predicted_data
+
+from sklearn.metrics import accuracy_score
+
+def predict(X, y):
+    np.random.seed(42)
+    test_sizes = [0.2]
+    k_values = [5]
+    p_values = [1]
+    print("="*40)
+    for k in k_values:
+        print(f"For k value = {k}")
+        for size in test_sizes:
+            print(f"For test size = {size}")
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=size, random_state=125)
+            scaler = StandardScaler()
+            X_train = scaler.fit_transform(X_train)
+            X_test = scaler.transform(X_test)
+            for p in p_values:
+                y_preds = knn_predict(X_train, y_train, X_test, k=k, p=p)
+                print("Accuracy score is: ", accuracy_score(y_test, y_preds))
+
+
+
+fruit_data = pd.read_csv("fruit.csv")
+fruit_data.drop("fruit_subtype", axis=1, inplace=True)
+fruits = fruit_data.drop("fruit_name", axis=1)
+X = fruits.drop("fruit_label", axis=1)
+y = fruits["fruit_label"]
+predict(X, y)
