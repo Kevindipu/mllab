@@ -1,62 +1,39 @@
-import pandas as pd
 import numpy as np
-from sklearn.neighbors import KNeighborsClassifier
+from collections import Counter
 from sklearn.model_selection import train_test_split
-from scipy.spatial.distance import cdist
-from sklearn.metrics import accuracy_score
-
-# Load Glass dataset
-glass = pd.read_csv("glass.csv")
-glass_X = glass.drop("Type", axis=1)
-glass_y = glass["Type"]
-
-# Define distance metrics
 
 def euclidean_distance(x1, x2):
+    distance = np.sqrt(np.sum((x1 - x2) ** 2))
+    return distance
 
-    return np.sqrt(np.sum((x1 - x2) ** 2))
+class KNN:
+    def __init__(self, k=3):
+        self.k = k
 
-# Define KNN classifier
+    def fit(self, X, y):
+        self.X_train = X
+        self.y_train = y
 
-def KNN_classifier(X_train, y_train, X_test, k, distance_metric):
+    def predict(self, X):
+        predictions = [self._predict(x) for x in X]
+        return predictions
 
-    y_pred = []
+    def _predict(self, x):
+        distances = [euclidean_distance(x, x_train) for x_train in self.X_train]
+        k_indices = np.argsort(distances)[:self.k]
+        k_nearest_labels = [self.y_train[i] for i in k_indices]
+        most_common = Counter(k_nearest_labels).most_common()
+        return most_common[0][0]
 
-    for i in range(X_test.shape[0]):
+df = pd.read_csv('glass.csv')
+X = df.drop('Type', axis=1).values
+y = df['Type'].values
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1234)
 
-        distances = cdist(X_train, [X_test.iloc[i]], metric=distance_metric)
+clf = KNN(k=3)
+clf.fit(X_train, y_train)
+predictions = clf.predict(X_test)
 
-        nearest_indices = np.argsort(distances, axis=0)[:k].flatten()
-
-        nearest_labels = y_train.iloc[nearest_indices]
-
-        label_counts = np.bincount(nearest_labels)
-
-        predicted_label = np.argmax(label_counts)
-
-        y_pred.append(predicted_label)
-
-    return y_pred
-
-# Define function to split dataset into training and testing
-
-def split_data(X, y, method):
-
-   X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
-   return X_train, X_test, y_train, y_test
-
-# Run KNN classifier for Glass dataset
-
-for method in ["70-30"]:
-
-    print(f"Results for Glass dataset using {method} split and Euclidean distance:")
-
-    X_train, X_test, y_train, y_test = split_data(glass_X, glass_y, method)
-
-    for k in [3]:
-
-        y_pred = KNN_classifier(X_train, y_train, X_test, k, euclidean_distance)
-
-        print(f"k={k}: Accuracy = {accuracy_score(y_test, y_pred)}")
-
-    print()
+accuracy = np.sum(predictions == y_test) / len(y_test)
+print(predictions)
+print("Accuracy:", accuracy)
