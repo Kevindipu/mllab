@@ -4,25 +4,26 @@ def best_first_search(graph, start, goal, heuristic):
     visited = set()
     pq = PriorityQueue()
     pq.put((heuristic[start], start))
+    path = {start: []}
     
     while not pq.empty():
         _, node = pq.get()
         
         if node == goal:
             print("Goal reached!")
+            print("Path:", path[node] + [node])  # Print the path taken
             return
         
         if node not in visited:
-            print("Visiting node:", node)
             visited.add(node)
             
             for neighbor, _ in graph[node]:
                 if neighbor not in visited:
                     pq.put((heuristic[neighbor], neighbor))
+                    path[neighbor] = path[node] + [node]  # Update the path for the neighbor
     
     print("Goal not found!")
-
-# Example graph representation using adjacency list
+    
 graph = {
     'A': [('B', 4), ('C', 2)],
     'B': [('A', 4), ('D', 5)],
@@ -44,5 +45,3 @@ heuristic_values = {
 }
 
 best_first_search(graph, start_node, goal_node, heuristic_values)
-Visiting node: A
-Visiting node: C
