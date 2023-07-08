@@ -3,11 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 data=pd.read_csv("./ToyotaCorolla.csv")
-data.head()
-# Exclude non-numeric columns
 numeric_data = data.select_dtypes(include='number')
-
-# Plot the correlation matrix
 plt.subplots()
-sns.heatmap(numeric_data.corr(), center=0, cmap='Blues')
+sns.heatmap(numeric_data.corr(), center=0, cmap='jet')
 plt.show()
