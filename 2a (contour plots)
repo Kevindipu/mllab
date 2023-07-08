@@ -1,0 +1,17 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+dataset = pd.read_csv('./ToyotaCorolla.csv')
+x = dataset['Age']
+y = dataset['KM']
+z = dataset['Price']
+
+#The tricontourf function is used to create filled contours for irregularly spaced data, where x and y represent the coordinates and z represents the values or heights of the data points.
+#The levels=20 argument specifies the number of contour levels to be displayed. In this case, it will generate 20 contour levels.
+#The cmap='jet' argument sets the colormap for the contour plot. The 'jet' colormap is a common choice and provides a range of colors from blue to red.
+plt.tricontourf(x, y, z, levels=20, cmap='jet')
+plt.colorbar(label='Price')
+plt.xlabel('Age')
+plt.ylabel('KM')
+plt.title('Contour Plot of Price vs. Age and KM')
+plt.show()
