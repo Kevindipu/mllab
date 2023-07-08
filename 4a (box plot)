@@ -1,0 +1,8 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+data=pd.read_csv('./ToyotaCorolla.csv')
+plt.boxplot([data["Price"],data["Age"],data["KM"]])
+#The x-axis tick labels are set using plt.xticks([1,2,3],["Price","Age","KM"]). This assigns the labels "Price", "Age", and "KM" to the corresponding positions on the x-axis.
+plt.xticks([1,2,3],["Price","Age","KM"])
+plt.show()
