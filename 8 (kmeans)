@@ -1,6 +1,6 @@
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
-from sklearn.datasets import load_iris
 
 def kmeans(X, K, max_iters=100):
     # Use the first K data points as the initial centroids
@@ -22,8 +22,8 @@ def kmeans(X, K, max_iters=100):
     return labels, centroids
 
 # Load the Iris dataset
-iris = load_iris()
-X = iris.data
+data = pd.read_csv('Iris.csv')
+X = data.drop('species', axis=1).values
 
 # Perform K-means clustering
 K = 3
