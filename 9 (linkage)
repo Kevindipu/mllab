@@ -1,13 +1,12 @@
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 from scipy.cluster.hierarchy import dendrogram, linkage
+from sklearn.datasets import load_iris
 
-# Define the dataset
-data = np.array([[4,4],
-                 [8,4],
-                 [15,8],
-                 [24,4],
-                 [24,12]])
+iris = pd.read_csv('Iris.csv').drop('species', axis=1).values
+data = iris[:5]
+print(data)
 
 # Function to calculate the proximity matrix based on single-linkage
 def single_linkage(data):
